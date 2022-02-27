@@ -43,7 +43,7 @@ class Generator
     }
 
     public function parse(){
-        $this->parsingStandard();
+        $this->includePartial();
         $this->parsingLoop();
         $this->parsingSingle();
         return preg_replace("/\>\s+\</",'><', $this->templateHTML);
@@ -67,22 +67,16 @@ class Generator
         return yaml_parse( $this->templateHTML ,-1);
     }
 
-    public function parsingStandard(){
-        preg_match_all("/\{+\s+(.+?)\s+\}+/", $this->templateHTML, $result);
-        if(! isset($result[1])) return;
-        
-        $html = '';
-
-        foreach($result[1] as $key=>$part){
-            if(strpos($part, 'include' )!==FALSE){
-                preg_match("/\"(.*?)\"/", $part, $file);
-                $path = $this->partialDir . $file[1];
-                if(file_exists($path)){
-                    $html = file_get_contents($path);
-                }
-            }
-            $this->templateHTML = str_replace($result[0][$key], $html, $this->templateHTML);
+    public function includePartial(){
+        preg_match_all("/\@include\s+\"(.+?)\"/", $this->templateHTML, $result);
+        if(!$result) return;
+        $tag = [];
+        $repl = [];
+        foreach($result[1] as $k=>$v){
+            $repl[] = file_get_contents($this->partialDir . $v);
+            $tag[] = $result[0][$k];
         }
+        $this->templateHTML = str_replace($tag, $repl, $this->templateHTML);     
     } 
 
     public function parsingloop()
