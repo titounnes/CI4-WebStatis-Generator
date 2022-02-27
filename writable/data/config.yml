@@ -1,0 +1,14 @@
+rootDir: /home/harjito/MyApp/public/
+baseURL: http://localhost:8080/dev/
+title: Judul
+description: description
+keywords: ini, itu, apa
+language: id
+text: '### helo apa kabarsss'
+menu: 
+  target: ['/foo','/bar']
+  label: ['Person', 'Persons']
+  icon: ['user','users']
+foo:
+  bar: ['***bash makan nasi***', '*Iwak bandeng mlebu weteng ser*','-alo','-ola','---']
+  bash: ['alo','apanya dong']
